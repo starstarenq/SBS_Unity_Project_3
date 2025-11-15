@@ -1,7 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : Entity
 {
+    Move move;
+
+    private void Awake()
+    {
+        move = GetComponent<Move>();
+    }
+
     // 정수 형식으로 HP ATK
     // 접근지정자인 private, public, protected 하나 선택해서 선언 ㄱㄱ
     // private: Enemy class 개인적인 것. 다른 클래스에서 사용하는거 안됨
@@ -15,5 +23,15 @@ public class Enemy : Entity
 
         Debug.Log("적의 사망");
         base.Dead();
+
+        StartCoroutine(DeathLogic());
+    }
+
+    IEnumerator DeathLogic()
+    {
+        move.Stop();
+        yield return new WaitForSeconds(2f);
+
+        Destroy(gameObject);
     }
 }

@@ -6,6 +6,7 @@ public class Entity : MonoBehaviour
     [SerializeField] private int AttackPower;
     [SerializeField] Animator animator;
     bool IsDead;
+    public bool IsEnemy;
     public bool CheckDead() => IsDead;
     public int GetHP() { return HealthPoint; }
     public void SetHP(int value) { HealthPoint = value; }
@@ -15,32 +16,50 @@ public class Entity : MonoBehaviour
     {
         IsDead = false;
     }
-    public void Damage(int amount)
+    public void Damage(Entity attacker)
     {
         if(IsDead) { return; }
         // 공격자의 공격력으로부터 자신의 체력 감소시킨다.
-        int attackerPower = amount;
+        int attackerPower = attacker.GetAttackPower();
         animator.SetTrigger("Hit");
         HealthPoint = HealthPoint - attackerPower;
+       
+        if (attacker.TryGetComponent<Move>(out var enemymove))
+        {
+            enemymove.Stop();
+            enemymove.KnockBack();
+            
+        }
+            
         if(HealthPoint <= 0 )
         {
             Dead();
-            Debug.Log("게임오버");
+           
             
         }
+        
     }
     protected virtual void Dead()
     {
         animator.SetTrigger("Death");
-        Destroy(gameObject);
+        IsDead = true;
+        //Destroy(gameObject);
+        
     }
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.TryGetComponent<Entity>( out var entity)) // 충돌한 대상이 Entity 있으면 실행하라.
         {
-            if (!entity.CheckDead()) 
+            if (IsEnemy&&entity.IsEnemy)
+
             {
-                Damage(entity.GetAttackPower());
+                return;
+            }
+            //enemy일때 다른 enemy랑 충돌안하게 해주세요.
+            if (entity.CheckDead()==false) 
+            {
+                Damage(entity);
             }   
         }
     }
