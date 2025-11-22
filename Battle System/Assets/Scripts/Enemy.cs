@@ -4,7 +4,12 @@ using UnityEngine;
 public class Enemy : Entity
 {
     Move move;
-
+    public int RewardMoney = 10;
+   [SerializeField] Player player;
+    private void Start()
+    {
+        player =Object.FindFirstObjectByType<Player>();
+    }
     private void Awake()
     {
         move = GetComponent<Move>();
@@ -23,6 +28,7 @@ public class Enemy : Entity
 
         Debug.Log("ÀûÀÇ »ç¸Á");
         base.Dead();
+        player.SetMoney(player.GetMoney()+RewardMoney);
 
         StartCoroutine(DeathLogic());
     }

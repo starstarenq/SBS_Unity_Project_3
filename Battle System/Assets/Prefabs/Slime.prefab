@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealthPoint: 20
+  MaxHealthPoint: 20
   AttackPower: 10
   animator: {fileID: 8849339334389345760}
   IsEnemy: 1

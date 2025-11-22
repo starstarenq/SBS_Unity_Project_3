@@ -50,9 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealthPoint: 30
+  MaxHealthPoint: 30
+  Amor: 0
   AttackPower: 20
   animator: {fileID: 8849339334389345760}
   IsEnemy: 1
+  RewardMoney: 25
 --- !u!212 &8734100792377302502
 SpriteRenderer:
   m_ObjectHideFlags: 0

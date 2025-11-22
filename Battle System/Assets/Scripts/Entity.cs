@@ -3,18 +3,23 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     [SerializeField] private int HealthPoint;
+    [SerializeField] private int MaxHealthPoint;
+    [SerializeField] private int Amor;
     [SerializeField] private int AttackPower;
     [SerializeField] Animator animator;
     bool IsDead;
     public bool IsEnemy;
     public bool CheckDead() => IsDead;
+    public int GetMaxHP() => MaxHealthPoint;
     public int GetHP() { return HealthPoint; }
     public void SetHP(int value) { HealthPoint = value; }
+    public void SetMaxHP(int value) => MaxHealthPoint = value;
     public int GetAttackPower() { return AttackPower; }
     public void SetAttackPower(int value) { AttackPower = value; }
     private void Start()
     {
         IsDead = false;
+        HealthPoint = MaxHealthPoint;
     }
     public void Damage(Entity attacker)
     {
