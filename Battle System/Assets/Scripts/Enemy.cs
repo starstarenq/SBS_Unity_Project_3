@@ -1,13 +1,16 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class Enemy : Entity
 {
     Move move;
     public int RewardMoney = 10;
    [SerializeField] Player player;
-    private void Start()
+    private bool isGuarding = false;
+    protected override void Start()
     {
+        base.Start();
         player =Object.FindFirstObjectByType<Player>();
     }
     private void Awake()
@@ -39,5 +42,19 @@ public class Enemy : Entity
         yield return new WaitForSeconds(2f);
 
         Destroy(gameObject);
+    }
+    public override void Damage(Entity attacker)
+    {
+        // 1. Guard 상태 체크: Guard 중이면 피해 무시
+        if (isGuarding)
+        {
+            Debug.Log("Guard 중이라 피해를 받지 않았습니다!");
+            return; // 여기서 메서드 종료 -> 피해를 받지 않음 (무적)
+        }
+
+        // 2. Guard 상태가 아닐 때만 부모 클래스의 Damage 로직 실행
+        // base.Damage(attacker)는 Entity 클래스의 Damage 메서드를 호출하여
+        // 방어력(Amor)을 계산하고 체력을 깎는 로직을 실행합니다.
+        base.Damage(attacker);
     }
 }

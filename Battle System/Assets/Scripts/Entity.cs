@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    
     [SerializeField] private int HealthPoint;
     [SerializeField] private int MaxHealthPoint;
     [SerializeField] private int Amor;
@@ -16,19 +17,26 @@ public class Entity : MonoBehaviour
     public void SetMaxHP(int value) => MaxHealthPoint = value;
     public int GetAttackPower() { return AttackPower; }
     public void SetAttackPower(int value) { AttackPower = value; }
-    private void Start()
+    public int GetAmor() { return Amor; }
+    public void SetAmor(int value) { Amor = value; }
+    protected virtual void Start()
     {
         IsDead = false;
         HealthPoint = MaxHealthPoint;
     }
-    public void Damage(Entity attacker)
+    public virtual void Damage(Entity attacker)
     {
         if(IsDead) { return; }
         // 공격자의 공격력으로부터 자신의 체력 감소시킨다.
         int attackerPower = attacker.GetAttackPower();
         animator.SetTrigger("Hit");
         HealthPoint = HealthPoint - attackerPower;
-       
+        int rawDamage = attacker.GetAttackPower();
+        int finalDamage = rawDamage - Amor;
+        if (finalDamage < 0)
+        {
+            finalDamage = 0;
+        }
         if (attacker.TryGetComponent<Move>(out var enemymove))
         {
             enemymove.Stop();
